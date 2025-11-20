@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "选择日期",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "page-header": "/components/page-header/page-header"
+  }
+}

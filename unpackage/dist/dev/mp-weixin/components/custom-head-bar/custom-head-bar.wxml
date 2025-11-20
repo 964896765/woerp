@@ -1,0 +1,1 @@
+<view class="customHead data-v-79012bec"><image class="bgimg data-v-79012bec" src="/static/image/head-bg.png" mode="aspectFill"></image><view class="brand data-v-79012bec"></view><view data-event-opts="{{[['tap',[['logout',['$event']]]]]}}" class="logout-btn data-v-79012bec" bindtap="__e"><text class="data-v-79012bec">退出</text></view></view>

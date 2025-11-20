@@ -1,0 +1,65 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/material/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/search/search",
+      "style": {
+        "navigationBarTitleText": "搜索物料",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/checkout/checkout",
+      "style": {
+        "navigationBarTitleText": "出入库结算",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/records/records",
+      "style": {
+        "navigationBarTitleText": "出入库记录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/records/date-picker",
+      "style": {
+        "navigationBarTitleText": "选择日期",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/dept-selector/dept-selector",
+      "style": {
+        "navigationBarTitleText": "选择部门",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/category-selector/category-selector",
+      "style": {
+        "navigationBarTitleText": "选择类别",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "材料管理系统",
+    "navigationBarBackgroundColor": "#2F85FC",
+    "backgroundColor": "#FFFFFF"
+  }
+}

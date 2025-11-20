@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "选择部门",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "page-header": "/components/page-header/page-header"
+  }
+}

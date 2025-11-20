@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "出入库记录",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "page-header": "/components/page-header/page-header",
+    "outbound-type-picker": "/components/outbound-type-picker/OutboundTypePicker"
+  }
+}

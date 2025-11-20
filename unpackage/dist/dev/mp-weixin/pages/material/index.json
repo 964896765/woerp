@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-head-bar": "/components/custom-head-bar/custom-head-bar",
+    "material-page": "/pages/material/material-page",
+    "safe-top": "/components/page-header/SafeTop"
+  }
+}

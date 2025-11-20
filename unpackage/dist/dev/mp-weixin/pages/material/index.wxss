@@ -1,0 +1,239 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 移动端适配样式 */
+.page { 
+  flex: 1; 
+  background: #f6f7fb;
+  height: 100vh;
+  /* 安全区域适配 - 先给固定 35px 兜底，再用 env 覆盖 */
+  padding-top: 35px;
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.header { 
+  position: relative; 
+  z-index: 2; 
+  will-change: transform, opacity; 
+  transition: opacity .2s, -webkit-transform .2s ease; 
+  transition: transform .2s ease, opacity .2s; 
+  transition: transform .2s ease, opacity .2s, -webkit-transform .2s ease;
+  flex-shrink: 0;
+}
+.content { 
+  flex: 1; 
+  position: relative; 
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.tabbar { 
+  height: 88rpx; 
+  min-height: 44px; /* 移动端最小高度 */
+  background: #fff; 
+  border-bottom: 1px solid #eef0f4; 
+  white-space: nowrap; 
+  display: flex; 
+  align-items: center;
+  flex-shrink: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab { 
+  display: inline-flex; 
+  padding: 0 28rpx; 
+  min-width: 120rpx; /* 确保最小宽度 */
+  height: 88rpx; 
+  align-items: center; 
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tab-text { 
+  font-size: 32rpx; 
+  color: #555; 
+  line-height: 88rpx;
+  white-space: nowrap;
+}
+.tab-text.active { 
+  color: #ff4d4f; 
+  font-weight: 800;
+}
+.swiper { 
+  flex: 1;
+  height: 100%; /* 使用100%高度，让父容器的padding处理安全区域 */
+  min-height: 0;
+}
+.page-item { 
+  flex: 1;
+  height: 100%;
+}
+/* 移动端响应式样式 */
+@media screen and (max-width: 480px) {
+.tabbar {
+    height: 80rpx;
+    min-height: 40px;
+}
+.tab {
+    padding: 0 24rpx;
+    min-width: 100rpx;
+    height: 80rpx;
+}
+.tab-text {
+    font-size: 30rpx;
+    line-height: 80rpx;
+}
+.swiper { height: 100%;
+}
+}
+@media screen and (max-width: 375px) {
+.tab {
+    padding: 0 20rpx;
+    min-width: 90rpx;
+}
+.tab-text { font-size: 28rpx;
+}
+}
+/* 横屏适配 */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+.swiper { height: 100%;
+}
+}
+/* 超小屏幕适配 */
+@media screen and (max-width: 320px) {
+.tabbar {
+    height: 76rpx;
+    min-height: 38px;
+}
+.tab {
+    padding: 0 16rpx;
+    min-width: 80rpx;
+    height: 76rpx;
+}
+.tab-text {
+    font-size: 26rpx;
+    line-height: 76rpx;
+}
+.swiper { height: 100%;
+}
+}
+

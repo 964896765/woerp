@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "选择类别",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "page-header": "/components/page-header/page-header"
+  }
+}

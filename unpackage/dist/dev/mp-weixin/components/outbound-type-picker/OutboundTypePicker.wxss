@@ -1,0 +1,16 @@
+
+.picker-wrap.data-v-52654f78{ width:100%; padding: 6px 8px;
+}
+.chip-scroll.data-v-52654f78{ white-space: nowrap;
+}
+.chip.data-v-52654f78{
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 30px; padding: 0 12px; margin-right: 8px;
+  border-radius: 999px; background: #f5f6f7; border: 1px solid #e5e6e7;
+}
+.chip--active.data-v-52654f78{ background: #ffeded; border-color: #ff4d4f;
+}
+.chip-txt.data-v-52654f78{ font-size: 12px;
+}
+/* 触发重新构建 */
+

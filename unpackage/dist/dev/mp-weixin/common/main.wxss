@@ -1,0 +1,183 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*每个页面公共css */
+
+/* 移动端适配和安全区域 */
+page {
+	background-color: #ffffff; /* 改为纯白色背景，使状态栏信息更清晰 */
+	height: 100vh;
+	/* 添加安全区域支持 */
+	padding-top: constant(safe-area-inset-top);
+	padding-top: env(safe-area-inset-top);
+	padding-bottom: constant(safe-area-inset-bottom);
+	padding-bottom: env(safe-area-inset-bottom);
+	/* 手动设置安全区域 */
+	padding-top: 55px;
+	padding-bottom: 15px;
+}
+
+/* 全局容器样式 */
+.safe-area-container {
+	width: 100%;
+	height: 100vh;
+	padding-top: 55px;
+	padding-bottom: 15px;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+/* 移动端视口设置 */
+page, page {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+/* 全局锁定外层滚动，避免把整页拖走 */
+page, page, #app { height: 100%; overflow: hidden; overscroll-behavior: none;
+}
+
+/* 小程序 page 也是全局选择器 */
+page { height: 100vh; overflow: hidden; overscroll-behavior: none;
+}
+
+/* 微信小程序适配样式 */
+
+
+
+/* 解决小程序中canvas触摸事件问题 */
+canvas {
+	touch-action: none;
+}
+
+/* 小程序中的按钮样式优化 */
+button::after {
+	border: none;
+}
+
+/* 小程序中的输入框样式优化 */
+input {
+	outline: none;
+}
+
+/* 小程序中的滚动视图优化 */
+scroll-view {
+	-webkit-overflow-scrolling: touch;
+}
+
+
+
+/* 通用样式 */
+view, text, image {
+	box-sizing: border-box;
+}
+
+/* 防止长按选中文本 */
+
+/* 输入框允许选中 */
+input, textarea {
+	-webkit-user-select: auto;
+	user-select: auto;
+}
+
+/* 移动端触摸优化 */
+
+/* 移动端滚动优化 */
+.scroll-container {
+	-webkit-overflow-scrolling: touch;
+	overflow-scrolling: touch;
+}
+
+/* 响应式字体大小 */
+@media screen and (max-width: 480px) {
+page {
+		font-size: 14px;
+}
+}
+@media screen and (min-width: 481px) and (max-width: 768px) {
+page {
+		font-size: 16px;
+}
+}
+@media screen and (min-width: 769px) {
+page {
+		font-size: 18px;
+}
+}
+

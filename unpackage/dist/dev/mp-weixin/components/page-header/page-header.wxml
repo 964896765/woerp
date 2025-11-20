@@ -1,0 +1,1 @@
+<view class="page-header data-v-11c6961c"><text data-event-opts="{{[['tap',[['handleBack',['$event']]]],['tap',[['handleBack',['$event']]]]]}}" class="back-btn data-v-11c6961c" bindtap="__e">←</text><text class="title data-v-11c6961c">{{title}}</text><view class="right-slot data-v-11c6961c"><slot name="right"></slot></view></view>

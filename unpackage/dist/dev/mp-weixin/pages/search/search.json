@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "搜索物料",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-keyboard": "/components/custom-keyboard/custom-keyboard"
+  }
+}

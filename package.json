@@ -1,0 +1,18 @@
+{
+    "name": "material-management-system",
+    "version": "1.0.0",
+    "description": "基于uni-app开发的材料管理系统",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "材料管理",
+        "库存管理",
+        "出入库",
+        "uni-app"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {}
+}

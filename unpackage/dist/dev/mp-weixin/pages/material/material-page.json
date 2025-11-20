@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "custom-keyboard": "/components/custom-keyboard/custom-keyboard",
+    "outbound-type-picker": "/components/outbound-type-picker/OutboundTypePicker"
+  },
+  "component": true
+}
