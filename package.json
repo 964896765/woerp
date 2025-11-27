@@ -1,18 +1,46 @@
 {
-    "name": "material-management-system",
-    "version": "1.0.0",
-    "description": "基于uni-app开发的材料管理系统",
-    "main": "main.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [
-        "材料管理",
-        "库存管理",
-        "出入库",
-        "uni-app"
-    ],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {}
+  "name": "woerp",
+  "version": "3.1.23",
+  "description": "基于uni-app开发的电芯行业原材料管理ERP系统",
+  "main": "main.js",
+  "scripts": {
+    "dev:h5": "cross-env NODE_ENV=development UNI_PLATFORM=h5 vue-cli-service serve",
+    "build:h5": "cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service build",
+    "dev:mp-weixin": "cross-env NODE_ENV=development UNI_PLATFORM=mp-weixin vue-cli-service build --watch",
+    "build:mp-weixin": "cross-env NODE_ENV=production UNI_PLATFORM=mp-weixin vue-cli-service build",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "材料管理",
+    "库存管理",
+    "出入库",
+    "uni-app",
+    "ERP",
+    "电芯行业",
+    "原材料管理"
+  ],
+  "author": "964896765",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/964896765/woerp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/964896765/woerp/issues"
+  },
+  "homepage": "https://github.com/964896765/woerp#readme",
+  "dependencies": {
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "sass": "^1.56.0",
+    "sass-loader": "^10.2.0"
+  },
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
+  }
 }
