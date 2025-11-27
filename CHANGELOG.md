@@ -10,12 +10,15 @@
 ## [Unreleased]
 
 ### 计划添加
-- [ ] 后端API集成模块
+- [ ] 用户认证系统
+- [ ] 权限管理模块
 - [ ] Excel导入导出功能
 - [ ] 打印功能（凭证打印）
 - [ ] 企业微信群通知功能
-- [ ] 数据持久化方案
-- [ ] 统一错误处理机制
+- [ ] 数据统计分析
+- [ ] 报表中心
+- [ ] 库存预警功能
+- [ ] 离线支持
 - [ ] 单元测试框架
 - [ ] CI/CD 自动化部署
 
@@ -24,10 +27,54 @@
 - [ ] 增强错误提示体验
 - [ ] 完善代码注释
 - [ ] 添加更多单元测试
+- [ ] 性能优化
 
 ---
 
-## [3.1.23] - 2025-11-27
+## [0.2.0] - 2025-11-27
+
+### 新增
+- ✨ 完整的 uniCloud 云开发支持
+- ✨ 9个核心数据库表结构设计
+  - materials（物料表）
+  - categories（类别表）
+  - departments（部门表）
+  - suppliers（供应商表）
+  - bom_headers（BOM表头）
+  - bom_items（BOM明细）
+  - inbound_orders（入库单）
+  - outbound_orders（出库单）
+  - stock_records（库存记录）
+- ✨ 3个云函数服务
+  - material-service（物料管理服务）
+  - warehouse-service（仓库管理服务）
+  - bom-service（BOM管理服务）
+- ✨ 前端数据交互封装模块（common/api/unicloud.js）
+- ✨ 云存储功能配置
+- ✨ uniCloud 使用指南文档（UNICLOUD.md）
+- ✨ 公共工具函数库（common/utils/index.js，25+函数）
+
+### 变更
+- 🔧 将后端架构从自建API改为uniCloud
+- 🔧 优化数据交互方式
+
+### 文档
+- 📝 完整的项目文档（README.md）
+- 📝 开发指南文档（DEVELOPMENT.md）
+- 📝 API接口文档（API.md）
+- 📝 更新日志（CHANGELOG.md）
+- 📝 贡献指南（CONTRIBUTING.md）
+- 📝 环境配置示例（.env.example）
+
+### 配置
+- 🔧 Git忽略配置（.gitignore）
+- 🔧 编辑器配置（.editorconfig）
+- 🔧 修正 manifest.json 中的项目描述
+- 🔧 完善 package.json 依赖配置
+
+---
+
+## [0.1.0] - 2024-XX-XX
 
 ### 新增
 - ✨ 完整的项目文档（README.md）
