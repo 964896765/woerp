@@ -1,0 +1,107 @@
+{
+  "bsonType": "object",
+  "description": "库存记录表 - 库存变动流水",
+  "required": ["material_id", "warehouse_type", "record_type", "quantity"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "记录ID，系统自动生成"
+    },
+    "material_id": {
+      "bsonType": "string",
+      "description": "物料ID",
+      "title": "物料ID"
+    },
+    "material_code": {
+      "bsonType": "string",
+      "description": "物料编码（冗余字段）",
+      "title": "物料编码"
+    },
+    "material_name": {
+      "bsonType": "string",
+      "description": "物料名称（冗余字段）",
+      "title": "物料名称"
+    },
+    "warehouse_type": {
+      "bsonType": "string",
+      "description": "仓库类型",
+      "title": "仓库类型",
+      "enum": ["main", "workshop", "bom", "pack", "auxiliary", "pending"]
+    },
+    "record_type": {
+      "bsonType": "string",
+      "description": "记录类型",
+      "title": "记录类型",
+      "enum": ["inbound", "outbound", "adjust", "transfer"],
+      "comment": "inbound-入库，outbound-出库，adjust-调整，transfer-调拨"
+    },
+    "quantity": {
+      "bsonType": "number",
+      "description": "变动数量（正数为增加，负数为减少）",
+      "title": "数量"
+    },
+    "unit": {
+      "bsonType": "string",
+      "description": "单位",
+      "title": "单位"
+    },
+    "before_quantity": {
+      "bsonType": "number",
+      "description": "变动前库存",
+      "title": "变动前库存"
+    },
+    "after_quantity": {
+      "bsonType": "number",
+      "description": "变动后库存",
+      "title": "变动后库存"
+    },
+    "order_id": {
+      "bsonType": "string",
+      "description": "关联单据ID（入库单/出库单ID）",
+      "title": "单据ID"
+    },
+    "order_no": {
+      "bsonType": "string",
+      "description": "关联单据号（冗余字段）",
+      "title": "单据号"
+    },
+    "department_id": {
+      "bsonType": "string",
+      "description": "部门ID（出库时记录）",
+      "title": "部门ID"
+    },
+    "department_name": {
+      "bsonType": "string",
+      "description": "部门名称（冗余字段）",
+      "title": "部门名称"
+    },
+    "operator": {
+      "bsonType": "string",
+      "description": "操作人",
+      "title": "操作人"
+    },
+    "operator_id": {
+      "bsonType": "string",
+      "description": "操作人ID",
+      "title": "操作人ID"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "备注说明",
+      "title": "备注"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

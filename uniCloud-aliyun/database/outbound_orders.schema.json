@@ -1,0 +1,156 @@
+{
+  "bsonType": "object",
+  "description": "出库单表 - 物料出库记录",
+  "required": ["order_no", "warehouse_type", "outbound_type", "items"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "出库单ID，系统自动生成"
+    },
+    "order_no": {
+      "bsonType": "string",
+      "description": "出库单号，唯一标识",
+      "title": "出库单号",
+      "trim": "both"
+    },
+    "warehouse_type": {
+      "bsonType": "string",
+      "description": "出库仓库类型",
+      "title": "仓库类型",
+      "enum": ["main", "workshop", "bom", "pack", "auxiliary", "pending"]
+    },
+    "outbound_type": {
+      "bsonType": "string",
+      "description": "出库类型",
+      "title": "出库类型",
+      "enum": ["purchase_return", "production_return", "production_issue", "batch_issue", "over_issue", "supplement_issue", "material_making", "auxiliary_issue"],
+      "comment": "purchase_return-采购退货，production_return-产线退仓，production_issue-生产领料，batch_issue-批次出库，over_issue-超领出库，supplement_issue-补料出库，material_making-制料领料，auxiliary_issue-辅料出库"
+    },
+    "department_id": {
+      "bsonType": "string",
+      "description": "领用部门ID",
+      "title": "部门ID"
+    },
+    "department_name": {
+      "bsonType": "string",
+      "description": "领用部门名称（冗余字段）",
+      "title": "部门名称"
+    },
+    "bom_id": {
+      "bsonType": "string",
+      "description": "关联BOM ID（按BOM发料时使用）",
+      "title": "BOM ID"
+    },
+    "items": {
+      "bsonType": "array",
+      "description": "出库物料明细",
+      "title": "物料明细",
+      "items": {
+        "bsonType": "object",
+        "required": ["material_id", "quantity"],
+        "properties": {
+          "material_id": {
+            "bsonType": "string",
+            "description": "物料ID"
+          },
+          "material_code": {
+            "bsonType": "string",
+            "description": "物料编码"
+          },
+          "material_name": {
+            "bsonType": "string",
+            "description": "物料名称"
+          },
+          "quantity": {
+            "bsonType": "number",
+            "description": "出库数量"
+          },
+          "unit": {
+            "bsonType": "string",
+            "description": "单位"
+          },
+          "price": {
+            "bsonType": "number",
+            "description": "单价"
+          },
+          "amount": {
+            "bsonType": "number",
+            "description": "金额"
+          },
+          "batch_no": {
+            "bsonType": "string",
+            "description": "批次号"
+          },
+          "description": {
+            "bsonType": "string",
+            "description": "备注"
+          }
+        }
+      }
+    },
+    "total_amount": {
+      "bsonType": "number",
+      "description": "总金额",
+      "title": "总金额",
+      "defaultValue": 0
+    },
+    "operator": {
+      "bsonType": "string",
+      "description": "操作人",
+      "title": "操作人"
+    },
+    "operator_id": {
+      "bsonType": "string",
+      "description": "操作人ID",
+      "title": "操作人ID"
+    },
+    "receiver": {
+      "bsonType": "string",
+      "description": "领料人",
+      "title": "领料人"
+    },
+    "receiver_id": {
+      "bsonType": "string",
+      "description": "领料人ID",
+      "title": "领料人ID"
+    },
+    "status": {
+      "bsonType": "string",
+      "description": "状态：draft-草稿，confirmed-已确认，cancelled-已取消",
+      "title": "状态",
+      "enum": ["draft", "confirmed", "cancelled"],
+      "defaultValue": "draft"
+    },
+    "confirm_time": {
+      "bsonType": "timestamp",
+      "description": "确认时间",
+      "title": "确认时间"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "备注说明",
+      "title": "备注"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "update_time": {
+      "bsonType": "timestamp",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

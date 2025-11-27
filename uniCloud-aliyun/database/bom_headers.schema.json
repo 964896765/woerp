@@ -1,0 +1,93 @@
+{
+  "bsonType": "object",
+  "description": "BOM表头 - BOM清单主表",
+  "required": ["code", "name", "product_id"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "BOM ID，系统自动生成"
+    },
+    "code": {
+      "bsonType": "string",
+      "description": "BOM编码，唯一标识",
+      "title": "BOM编码",
+      "trim": "both"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "BOM名称",
+      "title": "BOM名称",
+      "trim": "both"
+    },
+    "product_id": {
+      "bsonType": "string",
+      "description": "产品ID，关联materials表",
+      "title": "产品ID"
+    },
+    "product_name": {
+      "bsonType": "string",
+      "description": "产品名称（冗余字段）",
+      "title": "产品名称"
+    },
+    "version": {
+      "bsonType": "string",
+      "description": "版本号",
+      "title": "版本",
+      "defaultValue": "1.0"
+    },
+    "quantity": {
+      "bsonType": "number",
+      "description": "产品数量（基准数量）",
+      "title": "数量",
+      "defaultValue": 1
+    },
+    "unit": {
+      "bsonType": "string",
+      "description": "单位",
+      "title": "单位"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "BOM描述",
+      "title": "描述"
+    },
+    "status": {
+      "bsonType": "string",
+      "description": "状态：draft-草稿，active-生效，inactive-失效",
+      "title": "状态",
+      "enum": ["draft", "active", "inactive"],
+      "defaultValue": "draft"
+    },
+    "effective_date": {
+      "bsonType": "timestamp",
+      "description": "生效日期",
+      "title": "生效日期"
+    },
+    "expiry_date": {
+      "bsonType": "timestamp",
+      "description": "失效日期",
+      "title": "失效日期"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "update_time": {
+      "bsonType": "timestamp",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

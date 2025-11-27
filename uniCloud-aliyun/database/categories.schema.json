@@ -1,0 +1,72 @@
+{
+  "bsonType": "object",
+  "description": "类别表 - 物料分类管理",
+  "required": ["name", "warehouse_type"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "类别ID，系统自动生成"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "类别名称",
+      "title": "类别名称",
+      "trim": "both"
+    },
+    "warehouse_type": {
+      "bsonType": "string",
+      "description": "所属仓库类型",
+      "title": "仓库类型",
+      "enum": ["main", "workshop", "bom", "pack", "auxiliary", "pending"]
+    },
+    "parent_id": {
+      "bsonType": "string",
+      "description": "父类别ID，用于多级分类",
+      "title": "父类别ID"
+    },
+    "sort_order": {
+      "bsonType": "int",
+      "description": "排序顺序，数字越小越靠前",
+      "title": "排序",
+      "defaultValue": 0
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "类别描述",
+      "title": "描述"
+    },
+    "icon": {
+      "bsonType": "string",
+      "description": "类别图标",
+      "title": "图标"
+    },
+    "status": {
+      "bsonType": "string",
+      "description": "状态：active-启用，inactive-停用",
+      "title": "状态",
+      "enum": ["active", "inactive"],
+      "defaultValue": "active"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "update_time": {
+      "bsonType": "timestamp",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

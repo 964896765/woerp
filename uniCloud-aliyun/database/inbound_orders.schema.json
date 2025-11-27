@@ -1,0 +1,149 @@
+{
+  "bsonType": "object",
+  "description": "入库单表 - 物料入库记录",
+  "required": ["order_no", "warehouse_type", "items"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "入库单ID，系统自动生成"
+    },
+    "order_no": {
+      "bsonType": "string",
+      "description": "入库单号，唯一标识",
+      "title": "入库单号",
+      "trim": "both"
+    },
+    "warehouse_type": {
+      "bsonType": "string",
+      "description": "入库仓库类型",
+      "title": "仓库类型",
+      "enum": ["main", "workshop", "bom", "pack", "auxiliary", "pending"]
+    },
+    "inbound_type": {
+      "bsonType": "string",
+      "description": "入库类型",
+      "title": "入库类型",
+      "enum": ["purchase", "production", "return", "transfer", "other"],
+      "comment": "purchase-采购入库，production-生产入库，return-退货入库，transfer-调拨入库，other-其他入库"
+    },
+    "supplier_id": {
+      "bsonType": "string",
+      "description": "供应商ID",
+      "title": "供应商ID"
+    },
+    "supplier_name": {
+      "bsonType": "string",
+      "description": "供应商名称（冗余字段）",
+      "title": "供应商名称"
+    },
+    "items": {
+      "bsonType": "array",
+      "description": "入库物料明细",
+      "title": "物料明细",
+      "items": {
+        "bsonType": "object",
+        "required": ["material_id", "quantity"],
+        "properties": {
+          "material_id": {
+            "bsonType": "string",
+            "description": "物料ID"
+          },
+          "material_code": {
+            "bsonType": "string",
+            "description": "物料编码"
+          },
+          "material_name": {
+            "bsonType": "string",
+            "description": "物料名称"
+          },
+          "quantity": {
+            "bsonType": "number",
+            "description": "入库数量"
+          },
+          "unit": {
+            "bsonType": "string",
+            "description": "单位"
+          },
+          "price": {
+            "bsonType": "number",
+            "description": "单价"
+          },
+          "amount": {
+            "bsonType": "number",
+            "description": "金额"
+          },
+          "batch_no": {
+            "bsonType": "string",
+            "description": "批次号"
+          },
+          "production_date": {
+            "bsonType": "timestamp",
+            "description": "生产日期"
+          },
+          "expiry_date": {
+            "bsonType": "timestamp",
+            "description": "有效期至"
+          },
+          "description": {
+            "bsonType": "string",
+            "description": "备注"
+          }
+        }
+      }
+    },
+    "total_amount": {
+      "bsonType": "number",
+      "description": "总金额",
+      "title": "总金额",
+      "defaultValue": 0
+    },
+    "operator": {
+      "bsonType": "string",
+      "description": "操作人",
+      "title": "操作人"
+    },
+    "operator_id": {
+      "bsonType": "string",
+      "description": "操作人ID",
+      "title": "操作人ID"
+    },
+    "status": {
+      "bsonType": "string",
+      "description": "状态：draft-草稿，confirmed-已确认，cancelled-已取消",
+      "title": "状态",
+      "enum": ["draft", "confirmed", "cancelled"],
+      "defaultValue": "draft"
+    },
+    "confirm_time": {
+      "bsonType": "timestamp",
+      "description": "确认时间",
+      "title": "确认时间"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "备注说明",
+      "title": "备注"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "update_time": {
+      "bsonType": "timestamp",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "bsonType": "object",
+  "description": "物料表 - 存储所有物料信息",
+  "required": ["code", "name", "category_id", "unit", "warehouse_type"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "物料ID，系统自动生成"
+    },
+    "code": {
+      "bsonType": "string",
+      "description": "物料编码，唯一标识",
+      "title": "物料编码",
+      "trim": "both"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "物料名称",
+      "title": "物料名称",
+      "trim": "both"
+    },
+    "category_id": {
+      "bsonType": "string",
+      "description": "类别ID，关联categories表",
+      "title": "类别ID"
+    },
+    "category_name": {
+      "bsonType": "string",
+      "description": "类别名称（冗余字段，提高查询效率）",
+      "title": "类别名称"
+    },
+    "unit": {
+      "bsonType": "string",
+      "description": "计量单位，如：kg、个、箱",
+      "title": "单位",
+      "enum": ["kg", "g", "t", "个", "箱", "盒", "瓶", "袋", "卷", "米", "升", "毫升"]
+    },
+    "spec": {
+      "bsonType": "string",
+      "description": "规格说明",
+      "title": "规格"
+    },
+    "warehouse_type": {
+      "bsonType": "string",
+      "description": "仓库类型",
+      "title": "仓库类型",
+      "enum": ["main", "workshop", "bom", "pack", "auxiliary", "pending"]
+    },
+    "stock_quantity": {
+      "bsonType": "number",
+      "description": "库存数量",
+      "title": "库存数量",
+      "defaultValue": 0
+    },
+    "supplier_id": {
+      "bsonType": "string",
+      "description": "供应商ID，关联suppliers表",
+      "title": "供应商ID"
+    },
+    "supplier_name": {
+      "bsonType": "string",
+      "description": "供应商名称（冗余字段）",
+      "title": "供应商名称"
+    },
+    "price": {
+      "bsonType": "number",
+      "description": "单价（元）",
+      "title": "单价",
+      "defaultValue": 0
+    },
+    "min_stock": {
+      "bsonType": "number",
+      "description": "最小库存预警值",
+      "title": "最小库存",
+      "defaultValue": 0
+    },
+    "max_stock": {
+      "bsonType": "number",
+      "description": "最大库存上限",
+      "title": "最大库存"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "物料描述",
+      "title": "描述"
+    },
+    "image": {
+      "bsonType": "string",
+      "description": "物料图片URL",
+      "title": "图片"
+    },
+    "status": {
+      "bsonType": "string",
+      "description": "状态：active-启用，inactive-停用",
+      "title": "状态",
+      "enum": ["active", "inactive"],
+      "defaultValue": "active"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "update_time": {
+      "bsonType": "timestamp",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

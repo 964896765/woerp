@@ -1,0 +1,89 @@
+{
+  "bsonType": "object",
+  "description": "BOM明细表 - BOM清单明细",
+  "required": ["bom_id", "material_id", "quantity"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "明细ID，系统自动生成"
+    },
+    "bom_id": {
+      "bsonType": "string",
+      "description": "BOM ID，关联bom_headers表",
+      "title": "BOM ID"
+    },
+    "material_id": {
+      "bsonType": "string",
+      "description": "物料ID，关联materials表",
+      "title": "物料ID"
+    },
+    "material_code": {
+      "bsonType": "string",
+      "description": "物料编码（冗余字段）",
+      "title": "物料编码"
+    },
+    "material_name": {
+      "bsonType": "string",
+      "description": "物料名称（冗余字段）",
+      "title": "物料名称"
+    },
+    "quantity": {
+      "bsonType": "number",
+      "description": "用量",
+      "title": "用量"
+    },
+    "unit": {
+      "bsonType": "string",
+      "description": "单位",
+      "title": "单位"
+    },
+    "loss_rate": {
+      "bsonType": "number",
+      "description": "损耗率（百分比）",
+      "title": "损耗率",
+      "defaultValue": 0
+    },
+    "actual_quantity": {
+      "bsonType": "number",
+      "description": "实际用量（含损耗）",
+      "title": "实际用量"
+    },
+    "position": {
+      "bsonType": "string",
+      "description": "位置说明",
+      "title": "位置"
+    },
+    "sort_order": {
+      "bsonType": "int",
+      "description": "排序顺序",
+      "title": "排序",
+      "defaultValue": 0
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "备注说明",
+      "title": "备注"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "update_time": {
+      "bsonType": "timestamp",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

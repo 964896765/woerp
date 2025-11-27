@@ -1,0 +1,91 @@
+{
+  "bsonType": "object",
+  "description": "部门表 - 组织架构管理",
+  "required": ["name", "code"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "_id": {
+      "description": "部门ID，系统自动生成"
+    },
+    "code": {
+      "bsonType": "string",
+      "description": "部门编码，唯一标识",
+      "title": "部门编码",
+      "trim": "both"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "部门名称",
+      "title": "部门名称",
+      "trim": "both"
+    },
+    "type": {
+      "bsonType": "string",
+      "description": "部门类型",
+      "title": "部门类型",
+      "enum": ["production", "technical", "logistics", "quality", "admin", "other"],
+      "comment": "production-生产部门（配料、制片、卷绕、封装、注液、包装），technical-技术部，logistics-物流部，quality-质量部，admin-行政部，other-其他"
+    },
+    "production_type": {
+      "bsonType": "string",
+      "description": "生产部门具体类型",
+      "title": "生产类型",
+      "enum": ["batching", "sheeting", "winding", "packaging", "injection", "packing"],
+      "comment": "batching-配料，sheeting-制片，winding-卷绕，packaging-封装，injection-注液，packing-包装"
+    },
+    "parent_id": {
+      "bsonType": "string",
+      "description": "上级部门ID",
+      "title": "上级部门"
+    },
+    "manager": {
+      "bsonType": "string",
+      "description": "部门负责人",
+      "title": "负责人"
+    },
+    "phone": {
+      "bsonType": "string",
+      "description": "联系电话",
+      "title": "电话"
+    },
+    "sort_order": {
+      "bsonType": "int",
+      "description": "排序顺序",
+      "title": "排序",
+      "defaultValue": 0
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "部门描述",
+      "title": "描述"
+    },
+    "status": {
+      "bsonType": "string",
+      "description": "状态：active-启用，inactive-停用",
+      "title": "状态",
+      "enum": ["active", "inactive"],
+      "defaultValue": "active"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "update_time": {
+      "bsonType": "timestamp",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  }
+}

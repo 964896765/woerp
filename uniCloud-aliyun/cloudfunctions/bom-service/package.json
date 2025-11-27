@@ -1,0 +1,11 @@
+{
+  "name": "bom-service",
+  "version": "1.0.0",
+  "description": "BOM管理服务云函数",
+  "main": "index.js",
+  "dependencies": {},
+  "cloudfunction-config": {
+    "memorySize": 256,
+    "timeout": 60
+  }
+}
