@@ -200,11 +200,7 @@ class MaterialService {
       }
     }
   }
-}
-
-// 导出单例
-export default new MaterialService()
-
+  
   /**
    * 批量导入物料
    * @param {Array} materials - 物料数据数组
