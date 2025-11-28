@@ -3,7 +3,7 @@
  * 封装所有类别相关的业务逻辑和API调用
  */
 
-import { materialService } from '../api/unicloud.js'
+import { db } from '../api/unicloud.js'
 
 /**
  * 类别服务类
@@ -17,10 +17,22 @@ class CategoryService {
    */
   async getCategoryList(params = {}) {
     try {
-      const result = await materialService.getCategories(params)
+      const { warehouse_type } = params
+      
+      // 构建查询条件
+      const where = {}
+      if (warehouse_type) {
+        where.warehouse_type = warehouse_type
+      }
+      
+      // 直接查询categories集合
+      const result = await db.get('categories', where, {
+        orderBy: { field: 'sort_order', order: 'asc' }
+      })
+      
       return {
         success: true,
-        data: result.data || []
+        data: result || []
       }
     } catch (error) {
       console.error('[CategoryService] getCategoryList error:', error)
@@ -39,10 +51,19 @@ class CategoryService {
    */
   async createCategory(categoryData) {
     try {
-      const result = await materialService.createCategory(categoryData)
+      // 添加创建时间和更新时间
+      const now = Date.now()
+      const data = {
+        ...categoryData,
+        created_at: now,
+        updated_at: now
+      }
+      
+      const id = await db.add('categories', data)
+      
       return {
         success: true,
-        data: result.data || null,
+        data: { _id: id, ...data },
         message: '创建成功'
       }
     } catch (error) {
@@ -62,13 +83,17 @@ class CategoryService {
    */
   async updateCategory(categoryId, categoryData) {
     try {
-      const result = await materialService.updateCategory({
-        category_id: categoryId,
-        ...categoryData
-      })
+      // 添加更新时间
+      const data = {
+        ...categoryData,
+        updated_at: Date.now()
+      }
+      
+      await db.update('categories', categoryId, data)
+      
       return {
         success: true,
-        data: result.data || null,
+        data: { _id: categoryId, ...data },
         message: '更新成功'
       }
     } catch (error) {
@@ -87,7 +112,8 @@ class CategoryService {
    */
   async deleteCategory(categoryId) {
     try {
-      const result = await materialService.deleteCategory({ category_id: categoryId })
+      await db.remove('categories', categoryId)
+      
       return {
         success: true,
         message: '删除成功'
