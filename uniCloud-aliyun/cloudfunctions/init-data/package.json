@@ -1,0 +1,11 @@
+{
+  "name": "init-data",
+  "version": "1.0.0",
+  "description": "数据初始化云函数",
+  "main": "index.js",
+  "dependencies": {},
+  "cloudfunction-config": {
+    "memorySize": 256,
+    "timeout": 60
+  }
+}

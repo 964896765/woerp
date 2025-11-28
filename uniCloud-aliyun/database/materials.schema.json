@@ -45,6 +45,20 @@
       "description": "规格说明",
       "title": "规格"
     },
+    "batch_no": {
+      "bsonType": "string",
+      "description": "批次号",
+      "title": "批次号",
+      "trim": "both"
+    },
+    "using_departments": {
+      "bsonType": "array",
+      "description": "使用部门列表",
+      "title": "使用部门",
+      "items": {
+        "bsonType": "string"
+      }
+    },
     "warehouse_type": {
       "bsonType": "string",
       "description": "仓库类型",

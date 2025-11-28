@@ -34,8 +34,20 @@
     },
     "quantity": {
       "bsonType": "number",
-      "description": "用量",
-      "title": "用量"
+      "description": "用量（计划用量）",
+      "title": "计划用量"
+    },
+    "issued_quantity": {
+      "bsonType": "number",
+      "description": "实发数量（实际发放数量）",
+      "title": "实发数量",
+      "defaultValue": 0
+    },
+    "variance": {
+      "bsonType": "number",
+      "description": "差异（实发-计划）",
+      "title": "差异",
+      "defaultValue": 0
     },
     "unit": {
       "bsonType": "string",

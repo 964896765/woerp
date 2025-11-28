@@ -68,7 +68,15 @@
           },
           "quantity": {
             "bsonType": "number",
-            "description": "出库数量"
+            "description": "出库数量（可为负数）"
+          },
+          "planned_quantity": {
+            "bsonType": "number",
+            "description": "BOM计划用量"
+          },
+          "workshop_stock_reference": {
+            "bsonType": "number",
+            "description": "车间结存参考值"
           },
           "unit": {
             "bsonType": "string",
@@ -118,6 +126,12 @@
       "bsonType": "string",
       "description": "领料人ID",
       "title": "领料人ID"
+    },
+    "allow_negative": {
+      "bsonType": "bool",
+      "description": "是否允许负数出库",
+      "title": "允许负数",
+      "defaultValue": true
     },
     "status": {
       "bsonType": "string",

@@ -55,6 +55,21 @@ exports.main = async (event, context) => {
         response.data = await calculateWorkshopStock(data)
         break
       
+      // 获取车间结存参考值
+      case 'getWorkshopStockReference':
+        response.data = await getWorkshopStockReference(data)
+        break
+      
+      // 计算车间仓结存
+      case 'calculateWorkshopBalance':
+        response.data = await calculateWorkshopBalance(data)
+        break
+      
+      // 获取部门物料结存列表
+      case 'getDepartmentMaterialBalance':
+        response.data = await getDepartmentMaterialBalance(data)
+        break
+      
       default:
         response.code = 400
         response.message = `未知操作: ${action}`
@@ -551,5 +566,251 @@ async function calculateWorkshopStock(params) {
     outbound_quantity: outboundQuantity,
     bom_quantity: bomQuantity,
     workshop_quantity: workshopQuantity
+  }
+}
+
+
+/**
+ * 获取车间结存参考值
+ * 用于出库时显示参考
+ * @param {Object} data - 包含material_id和department_id
+ */
+async function getWorkshopStockReference(data) {
+  const { material_id, department_id } = data
+  
+  if (!material_id) {
+    throw new Error('请提供物料ID')
+  }
+  
+  // 生产部门列表
+  const productionDepts = ['配料', '制片', '卷绕', '封装', '注液', '化成', '包装']
+  
+  // 获取该物料的所有出库记录（到生产部门）
+  const outboundCol = db.collection('outbound_orders')
+  const outboundRes = await outboundCol
+    .where({
+      status: 'confirmed',
+      warehouse_type: 'main'
+    })
+    .get()
+  
+  // 计算实发总量
+  let totalIssued = 0
+  for (const order of outboundRes.data) {
+    if (productionDepts.includes(order.department_name)) {
+      for (const item of order.items) {
+        if (item.material_id === material_id) {
+          totalIssued += item.quantity
+        }
+      }
+    }
+  }
+  
+  // 获取BOM计划用量
+  const bomItemsCol = db.collection('bom_items')
+  const bomItemsRes = await bomItemsCol
+    .where({ material_id })
+    .get()
+  
+  let totalPlanned = 0
+  for (const item of bomItemsRes.data) {
+    totalPlanned += item.quantity || 0
+  }
+  
+  // 计算结存
+  const balance = totalIssued - totalPlanned
+  
+  return {
+    material_id,
+    total_issued: totalIssued, // 实发总量
+    total_planned: totalPlanned, // 计划总量
+    balance, // 结存（可为负数）
+    department_id: department_id || null
+  }
+}
+
+/**
+ * 计算车间仓结存
+ * 车间仓结存 = 实发数量 - BOM用量
+ * @param {Object} data - 查询条件
+ */
+async function calculateWorkshopBalance(data) {
+  const { department_id, material_id } = data || {}
+  
+  const productionDepts = ['配料', '制片', '卷绕', '封装', '注液', '化成', '包装']
+  
+  // 获取所有确认的出库单
+  const outboundCol = db.collection('outbound_orders')
+  let outboundQuery = outboundCol.where({
+    status: 'confirmed',
+    warehouse_type: 'main'
+  })
+  
+  const outboundRes = await outboundQuery.get()
+  
+  // 统计各物料的实发数量
+  const issuedMap = {}
+  
+  for (const order of outboundRes.data) {
+    // 只统计生产部门
+    if (!productionDepts.includes(order.department_name)) {
+      continue
+    }
+    
+    // 如果指定了部门，只统计该部门
+    if (department_id && order.department_id !== department_id) {
+      continue
+    }
+    
+    for (const item of order.items) {
+      const key = `${item.material_id}_${order.department_id}`
+      if (!issuedMap[key]) {
+        issuedMap[key] = {
+          material_id: item.material_id,
+          material_code: item.material_code,
+          material_name: item.material_name,
+          department_id: order.department_id,
+          department_name: order.department_name,
+          issued_quantity: 0,
+          planned_quantity: 0,
+          balance: 0
+        }
+      }
+      issuedMap[key].issued_quantity += item.quantity
+    }
+  }
+  
+  // 获取BOM计划用量
+  const bomItemsCol = db.collection('bom_items')
+  let bomQuery = bomItemsCol.where({})
+  
+  if (material_id) {
+    bomQuery = bomQuery.where({ material_id })
+  }
+  
+  const bomItemsRes = await bomQuery.get()
+  
+  // 统计BOM计划用量（这里简化处理，实际应该关联BOM和部门）
+  for (const item of bomItemsRes.data) {
+    // 遍历所有部门
+    for (const dept of productionDepts) {
+      const deptId = dept // 简化处理，实际应该查询部门ID
+      const key = `${item.material_id}_${deptId}`
+      
+      if (issuedMap[key]) {
+        issuedMap[key].planned_quantity += item.quantity || 0
+      }
+    }
+  }
+  
+  // 计算结存
+  const balanceList = []
+  for (const key in issuedMap) {
+    const item = issuedMap[key]
+    item.balance = item.issued_quantity - item.planned_quantity
+    balanceList.push(item)
+  }
+  
+  // 如果指定了物料ID，只返回该物料
+  if (material_id) {
+    return balanceList.filter(item => item.material_id === material_id)
+  }
+  
+  return balanceList
+}
+
+/**
+ * 获取部门物料结存列表
+ * 用于车间仓页面显示
+ * @param {Object} data - 包含department_id
+ */
+async function getDepartmentMaterialBalance(data) {
+  const { department_id, department_name } = data
+  
+  if (!department_id && !department_name) {
+    throw new Error('请提供部门ID或部门名称')
+  }
+  
+  // 获取该部门的所有出库记录
+  const outboundCol = db.collection('outbound_orders')
+  let query = outboundCol.where({
+    status: 'confirmed',
+    warehouse_type: 'main'
+  })
+  
+  if (department_id) {
+    query = query.where({ department_id })
+  } else if (department_name) {
+    query = query.where({ department_name })
+  }
+  
+  const outboundRes = await query.get()
+  
+  // 统计各物料的实发数量
+  const materialMap = {}
+  
+  for (const order of outboundRes.data) {
+    for (const item of order.items) {
+      if (!materialMap[item.material_id]) {
+        materialMap[item.material_id] = {
+          material_id: item.material_id,
+          material_code: item.material_code,
+          material_name: item.material_name,
+          unit: item.unit,
+          issued_quantity: 0,
+          planned_quantity: 0,
+          balance: 0,
+          last_issue_time: null
+        }
+      }
+      
+      materialMap[item.material_id].issued_quantity += item.quantity
+      
+      // 更新最后领用时间
+      if (!materialMap[item.material_id].last_issue_time || 
+          order.confirm_time > materialMap[item.material_id].last_issue_time) {
+        materialMap[item.material_id].last_issue_time = order.confirm_time
+      }
+    }
+  }
+  
+  // 获取BOM计划用量
+  const bomItemsCol = db.collection('bom_items')
+  const materialIds = Object.keys(materialMap)
+  
+  if (materialIds.length > 0) {
+    const bomItemsRes = await bomItemsCol
+      .where({
+        material_id: dbCmd.in(materialIds)
+      })
+      .get()
+    
+    for (const item of bomItemsRes.data) {
+      if (materialMap[item.material_id]) {
+        materialMap[item.material_id].planned_quantity += item.quantity || 0
+      }
+    }
+  }
+  
+  // 计算结存
+  const balanceList = []
+  for (const materialId in materialMap) {
+    const item = materialMap[materialId]
+    item.balance = item.issued_quantity - item.planned_quantity
+    balanceList.push(item)
+  }
+  
+  // 按物料编码排序
+  balanceList.sort((a, b) => {
+    if (a.material_code < b.material_code) return -1
+    if (a.material_code > b.material_code) return 1
+    return 0
+  })
+  
+  return {
+    department_id: department_id || null,
+    department_name: department_name || null,
+    total_materials: balanceList.length,
+    materials: balanceList
   }
 }

@@ -49,6 +49,21 @@ exports.main = async (event, context) => {
         response.data = await issueMaterials(data)
         break
       
+      // 按BOM发料（支持差异）
+      case 'issueMaterialsWithVariance':
+        response.data = await issueMaterialsWithVariance(data)
+        break
+      
+      // 获取BOM计划用量
+      case 'getBomPlannedQuantity':
+        response.data = await getBomPlannedQuantity(data)
+        break
+      
+      // 更新实发数量
+      case 'updateIssuedQuantity':
+        response.data = await updateIssuedQuantity(data)
+        break
+      
       // 批量导入BOM
       case 'import':
         response.data = await importBoms(data)
@@ -566,4 +581,276 @@ async function exportBoms(params) {
     list: result.data,
     total: result.data.length
   }
+}
+
+
+/**
+ * 按BOM发料（支持差异）
+ * 实现参照和应变功能
+ * @param {Object} data - 发料数据
+ */
+async function issueMaterialsWithVariance(data) {
+  const {
+    bom_id,
+    department_id,
+    department_name,
+    production_quantity, // 生产数量
+    items, // 物料明细（包含计划用量和实发数量）
+    operator,
+    operator_id,
+    description
+  } = data
+  
+  if (!bom_id) {
+    throw new Error('请提供BOM ID')
+  }
+  
+  if (!department_id && !department_name) {
+    throw new Error('请提供部门信息')
+  }
+  
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    throw new Error('请提供发料明细')
+  }
+  
+  // 获取BOM信息
+  const bomHeadersCol = db.collection('bom_headers')
+  const bomRes = await bomHeadersCol.doc(bom_id).get()
+  
+  if (bomRes.data.length === 0) {
+    throw new Error('BOM不存在')
+  }
+  
+  const bom = bomRes.data[0]
+  
+  // 创建出库单
+  const outboundCol = db.collection('outbound_orders')
+  const orderNo = generateOrderNo('OUT')
+  
+  // 准备出库明细
+  const outboundItems = []
+  const bomItemUpdates = [] // 用于更新BOM明细的实发数量
+  
+  for (const item of items) {
+    const {
+      material_id,
+      material_code,
+      material_name,
+      unit,
+      planned_quantity, // 计划用量
+      issued_quantity, // 实发数量（用户填写）
+      bom_item_id
+    } = item
+    
+    // 计算差异
+    const variance = issued_quantity - planned_quantity
+    
+    // 获取车间结存参考值
+    let workshopStockReference = 0
+    try {
+      const warehouseService = uniCloud.importObject('warehouse-service')
+      const refResult = await warehouseService.getWorkshopStockReference({
+        material_id,
+        department_id
+      })
+      workshopStockReference = refResult.balance || 0
+    } catch (error) {
+      console.error('获取车间结存失败:', error)
+    }
+    
+    outboundItems.push({
+      material_id,
+      material_code,
+      material_name,
+      quantity: issued_quantity, // 实发数量
+      planned_quantity, // 计划用量
+      workshop_stock_reference: workshopStockReference,
+      unit,
+      variance, // 差异
+      description: variance !== 0 ? `差异: ${variance > 0 ? '+' : ''}${variance}${unit}` : ''
+    })
+    
+    // 记录需要更新的BOM明细
+    if (bom_item_id) {
+      bomItemUpdates.push({
+        id: bom_item_id,
+        issued_quantity,
+        variance
+      })
+    }
+  }
+  
+  // 创建出库单
+  const outboundOrder = {
+    order_no: orderNo,
+    warehouse_type: 'main',
+    outbound_type: 'production_issue',
+    department_id,
+    department_name,
+    bom_id,
+    items: outboundItems,
+    total_amount: 0,
+    operator,
+    operator_id,
+    allow_negative: true,
+    status: 'confirmed', // 直接确认
+    confirm_time: Date.now(),
+    description: description || `按BOM ${bom.code} 发料，生产数量: ${production_quantity}`,
+    create_time: Date.now(),
+    update_time: Date.now()
+  }
+  
+  const outboundRes = await outboundCol.add(outboundOrder)
+  
+  // 更新物料库存
+  const materialsCol = db.collection('materials')
+  for (const item of outboundItems) {
+    await materialsCol.where({
+      _id: item.material_id
+    }).update({
+      stock_quantity: dbCmd.inc(-item.quantity)
+    })
+  }
+  
+  // 更新BOM明细的实发数量和差异
+  const bomItemsCol = db.collection('bom_items')
+  for (const update of bomItemUpdates) {
+    await bomItemsCol.doc(update.id).update({
+      issued_quantity: dbCmd.inc(update.issued_quantity),
+      variance: dbCmd.inc(update.variance),
+      update_time: Date.now()
+    })
+  }
+  
+  // 记录库存流水
+  const stockRecordsCol = db.collection('stock_records')
+  for (const item of outboundItems) {
+    await stockRecordsCol.add({
+      material_id: item.material_id,
+      material_code: item.material_code,
+      material_name: item.material_name,
+      warehouse_type: 'main',
+      record_type: 'outbound',
+      quantity: -item.quantity,
+      unit: item.unit,
+      order_no: orderNo,
+      order_id: outboundRes.id,
+      department_id,
+      department_name,
+      operator,
+      operator_id,
+      description: item.description,
+      create_time: Date.now()
+    })
+  }
+  
+  return {
+    order_id: outboundRes.id,
+    order_no: orderNo,
+    items: outboundItems,
+    message: '按BOM发料成功'
+  }
+}
+
+/**
+ * 获取BOM计划用量
+ * @param {Object} data - 包含bom_id
+ */
+async function getBomPlannedQuantity(data) {
+  const { bom_id, production_quantity } = data
+  
+  if (!bom_id) {
+    throw new Error('请提供BOM ID')
+  }
+  
+  // 获取BOM表头
+  const bomHeadersCol = db.collection('bom_headers')
+  const headerRes = await bomHeadersCol.doc(bom_id).get()
+  
+  if (headerRes.data.length === 0) {
+    throw new Error('BOM不存在')
+  }
+  
+  const header = headerRes.data[0]
+  
+  // 获取BOM明细
+  const bomItemsCol = db.collection('bom_items')
+  const itemsRes = await bomItemsCol.where({ bom_id }).get()
+  
+  // 计算每个物料的计划用量
+  const plannedItems = itemsRes.data.map(item => {
+    // 计算实际需要的数量
+    const ratio = production_quantity / header.quantity
+    const plannedQty = item.quantity * ratio
+    const actualQty = item.actual_quantity * ratio // 含损耗
+    
+    return {
+      bom_item_id: item._id,
+      material_id: item.material_id,
+      material_code: item.material_code,
+      material_name: item.material_name,
+      unit: item.unit,
+      planned_quantity: plannedQty, // 计划用量
+      issued_quantity: item.issued_quantity || 0, // 已发数量
+      variance: item.variance || 0, // 累计差异
+      loss_rate: item.loss_rate || 0,
+      actual_quantity: actualQty, // 实际用量（含损耗）
+      suggested_quantity: actualQty // 建议发放数量
+    }
+  })
+  
+  return {
+    bom_id,
+    bom_code: header.code,
+    bom_name: header.name,
+    production_quantity,
+    base_quantity: header.quantity,
+    items: plannedItems
+  }
+}
+
+/**
+ * 更新实发数量
+ * @param {Object} data - 包含bom_item_id和issued_quantity
+ */
+async function updateIssuedQuantity(data) {
+  const { bom_item_id, issued_quantity, planned_quantity } = data
+  
+  if (!bom_item_id) {
+    throw new Error('请提供BOM明细ID')
+  }
+  
+  if (issued_quantity === undefined || issued_quantity === null) {
+    throw new Error('请提供实发数量')
+  }
+  
+  const bomItemsCol = db.collection('bom_items')
+  
+  // 计算差异
+  const variance = issued_quantity - (planned_quantity || 0)
+  
+  await bomItemsCol.doc(bom_item_id).update({
+    issued_quantity,
+    variance,
+    update_time: Date.now()
+  })
+  
+  return {
+    bom_item_id,
+    issued_quantity,
+    variance,
+    message: '实发数量更新成功'
+  }
+}
+
+/**
+ * 生成单据号
+ */
+function generateOrderNo(prefix) {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const time = String(date.getTime()).slice(-6)
+  return `${prefix}${year}${month}${day}${time}`
 }

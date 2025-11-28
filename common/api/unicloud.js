@@ -408,3 +408,108 @@ export default {
   db,
   storage
 }
+
+
+// ==================== Excel服务 ====================
+export const excelService = {
+  /**
+   * 导入物料
+   */
+  importMaterials(materials, warehouse_type) {
+    return callFunction('excel-service', 'importMaterials', { materials, warehouse_type })
+  },
+  
+  /**
+   * 导入BOM
+   */
+  importBom(bomData) {
+    return callFunction('excel-service', 'importBom', bomData)
+  },
+  
+  /**
+   * 导出物料
+   */
+  exportMaterials(params) {
+    return callFunction('excel-service', 'exportMaterials', params)
+  },
+  
+  /**
+   * 导出BOM
+   */
+  exportBom(bom_id) {
+    return callFunction('excel-service', 'exportBom', { bom_id })
+  },
+  
+  /**
+   * 获取BOM模板
+   */
+  getBomTemplate() {
+    return callFunction('excel-service', 'getBomTemplate', {})
+  },
+  
+  /**
+   * 获取物料模板
+   */
+  getMaterialTemplate() {
+    return callFunction('excel-service', 'getMaterialTemplate', {})
+  }
+}
+
+// ==================== 数据初始化服务 ====================
+export const initDataService = {
+  /**
+   * 初始化所有数据
+   */
+  initAll() {
+    return callFunction('init-data', 'initAll', {})
+  },
+  
+  /**
+   * 初始化部门数据
+   */
+  initDepartments() {
+    return callFunction('init-data', 'initDepartments', {})
+  },
+  
+  /**
+   * 初始化类别数据
+   */
+  initCategories() {
+    return callFunction('init-data', 'initCategories', {})
+  },
+  
+  /**
+   * 初始化物料数据
+   */
+  initMaterials() {
+    return callFunction('init-data', 'initMaterials', {})
+  }
+}
+
+// ==================== 扩展仓库服务 ====================
+// 添加新的方法到warehouseService
+warehouseService.getWorkshopStockReference = function(material_id, department_id) {
+  return callFunction('warehouse-service', 'getWorkshopStockReference', { material_id, department_id })
+}
+
+warehouseService.calculateWorkshopBalance = function(params) {
+  return callFunction('warehouse-service', 'calculateWorkshopBalance', params)
+}
+
+warehouseService.getDepartmentMaterialBalance = function(department_id, department_name) {
+  return callFunction('warehouse-service', 'getDepartmentMaterialBalance', { department_id, department_name })
+}
+
+// ==================== 扩展BOM服务 ====================
+// 添加新的方法到bomService
+bomService.issueMaterialsWithVariance = function(data) {
+  return callFunction('bom-service', 'issueMaterialsWithVariance', data)
+}
+
+bomService.getBomPlannedQuantity = function(bom_id, production_quantity) {
+  return callFunction('bom-service', 'getBomPlannedQuantity', { bom_id, production_quantity })
+}
+
+bomService.updateIssuedQuantity = function(bom_item_id, issued_quantity, planned_quantity) {
+  return callFunction('bom-service', 'updateIssuedQuantity', { bom_item_id, issued_quantity, planned_quantity })
+}
