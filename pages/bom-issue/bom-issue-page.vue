@@ -37,7 +37,7 @@
             v-for="bom in bomList" 
             :key="bom._id"
             class="bom-item"
-            :class="{ 'selected': selectedBom?._id === bom._id }"
+            :class="{ 'selected': selectedBom && selectedBom._id === bom._id }"
             @click="selectBom(bom)"
           >
             <view class="bom-info">

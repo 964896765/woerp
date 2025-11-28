@@ -16,7 +16,7 @@
             v-for="category in categories" 
             :key="category._id"
             class="category-item"
-            :class="{ 'active': currentCategory?._id === category._id }"
+            :class="{ 'active': currentCategory && currentCategory._id === category._id }"
             @click="selectCategory(category)"
           >
             <view class="category-name">{{ category.name }}</view>
@@ -277,7 +277,7 @@ export default {
     
     // 选择类别
     async selectCategory(category) {
-      if (this.currentCategory?._id === category._id) return
+      if (this.currentCategory && this.currentCategory._id === category._id) return
       
       this.currentCategory = category
       this.materials = []
@@ -296,14 +296,14 @@ export default {
       try {
         const params = {
           warehouse_type: this.currentWarehouseType,
-          category_id: this.currentCategory?._id,
+          category_id: this.currentCategory ? this.currentCategory._id : null,
           page: this.page,
           pageSize: this.pageSize
         }
         
         // 车间仓使用部门ID
         if (this.currentWarehouseType === 'workshop') {
-          params.department_id = this.currentCategory?._id
+          params.department_id = this.currentCategory ? this.currentCategory._id : null
           delete params.category_id
         }
         
