@@ -75,7 +75,7 @@
                     <view class="label">结存:</view>
                     <view 
                       class="value balance" 
-                      :class="getBalanceClass(item.balance)"
+                      :class="[item.balance > 0 ? 'positive' : item.balance < 0 ? 'negative' : 'zero']"
                     >
                       {{ formatBalance(item.balance) }} {{ item.unit }}
                     </view>
@@ -83,7 +83,7 @@
                 </view>
                 
                 <!-- 结存状态标签 -->
-                <view class="balance-badge" :class="getBalanceClass(item.balance)">
+                <view class="balance-badge" :class="[item.balance > 0 ? 'positive' : item.balance < 0 ? 'negative' : 'zero']">
                   {{ getBalanceText(item.balance) }}
                 </view>
               </view>

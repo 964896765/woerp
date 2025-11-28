@@ -77,6 +77,15 @@
       }
     }
   ],
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^swipe-item$": "@/components/common/swipe-item.vue",
+      "^skeleton-loader$": "@/components/common/skeleton-loader.vue",
+      "^empty-state$": "@/components/common/empty-state.vue",
+      "^material-card$": "@/components/business/material-card.vue"
+    }
+  },
   "globalStyle": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "材料管理系统",
