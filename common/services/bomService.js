@@ -204,6 +204,72 @@ class BomService {
       }
     }
   }
+  
+  /**
+   * 按BOM发料（支持差异）
+   * @param {Object} params - 发料参数
+   * @returns {Promise}
+   */
+  async issueMaterialsWithVariance(params) {
+    try {
+      const result = await bomService.issueMaterialsWithVariance(params)
+      return {
+        success: true,
+        data: result.data || null,
+        message: '发料成功'
+      }
+    } catch (error) {
+      console.error('[BomService] issueMaterialsWithVariance error:', error)
+      return {
+        success: false,
+        message: error.message || 'BOM发料失败'
+      }
+    }
+  }
+  
+  /**
+   * 批量导入BOM
+   * @param {Array} boms - BOM数据数组
+   * @returns {Promise}
+   */
+  async importBoms(boms) {
+    try {
+      const result = await bomService.import({ boms })
+      return {
+        success: true,
+        data: result,
+        message: '导入成功'
+      }
+    } catch (error) {
+      console.error('[BomService] importBoms error:', error)
+      return {
+        success: false,
+        message: error.message || '导入BOM失败'
+      }
+    }
+  }
+  
+  /**
+   * 导出BOM
+   * @param {Object} params - 导出参数
+   * @returns {Promise}
+   */
+  async exportBoms(params) {
+    try {
+      const result = await bomService.export(params)
+      return {
+        success: true,
+        data: result,
+        message: '导出成功'
+      }
+    } catch (error) {
+      console.error('[BomService] exportBoms error:', error)
+      return {
+        success: false,
+        message: error.message || '导出BOM失败'
+      }
+    }
+  }
 }
 
 // 导出单例

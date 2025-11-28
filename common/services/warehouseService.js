@@ -187,6 +187,94 @@ class WarehouseService {
       }
     }
   }
+  
+  /**
+   * 确认入库
+   * @param {String} id - 入库单ID
+   * @returns {Promise}
+   */
+  async confirmInbound(id) {
+    try {
+      const result = await warehouseService.confirmInbound(id)
+      return {
+        success: true,
+        data: result,
+        message: '入库确认成功'
+      }
+    } catch (error) {
+      console.error('[WarehouseService] confirmInbound error:', error)
+      return {
+        success: false,
+        message: error.message || '入库确认失败'
+      }
+    }
+  }
+  
+  /**
+   * 确认出库
+   * @param {String} id - 出库单ID
+   * @returns {Promise}
+   */
+  async confirmOutbound(id) {
+    try {
+      const result = await warehouseService.confirmOutbound(id)
+      return {
+        success: true,
+        data: result,
+        message: '出库确认成功'
+      }
+    } catch (error) {
+      console.error('[WarehouseService] confirmOutbound error:', error)
+      return {
+        success: false,
+        message: error.message || '出库确认失败'
+      }
+    }
+  }
+  
+  /**
+   * 获取仓库统计
+   * @param {String} warehouse_type - 仓库类型
+   * @returns {Promise}
+   */
+  async getWarehouseStats(warehouse_type) {
+    try {
+      const result = await warehouseService.getWarehouseStats(warehouse_type)
+      return {
+        success: true,
+        data: result
+      }
+    } catch (error) {
+      console.error('[WarehouseService] getWarehouseStats error:', error)
+      return {
+        success: false,
+        message: error.message || '获取仓库统计失败',
+        data: null
+      }
+    }
+  }
+  
+  /**
+   * 计算车间仓数量
+   * @param {String} material_id - 物料ID
+   * @returns {Promise}
+   */
+  async calculateWorkshopStock(material_id) {
+    try {
+      const result = await warehouseService.calculateWorkshopStock({ material_id })
+      return {
+        success: true,
+        data: result
+      }
+    } catch (error) {
+      console.error('[WarehouseService] calculateWorkshopStock error:', error)
+      return {
+        success: false,
+        message: error.message || '计算车间仓数量失败',
+        data: null
+      }
+    }
+  }
 }
 
 // 导出单例

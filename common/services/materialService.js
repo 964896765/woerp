@@ -204,3 +204,76 @@ class MaterialService {
 
 // 导出单例
 export default new MaterialService()
+
+  /**
+   * 批量导入物料
+   * @param {Array} materials - 物料数据数组
+   * @param {String} warehouse_type - 仓库类型
+   * @returns {Promise}
+   */
+  async importMaterials(materials, warehouse_type) {
+    try {
+      const result = await materialService.import(materials, warehouse_type)
+      return {
+        success: true,
+        data: result,
+        message: '导入成功'
+      }
+    } catch (error) {
+      console.error('[MaterialService] importMaterials error:', error)
+      return {
+        success: false,
+        message: error.message || '导入物料失败'
+      }
+    }
+  }
+  
+  /**
+   * 导出物料
+   * @param {Object} params - 导出参数
+   * @returns {Promise}
+   */
+  async exportMaterials(params) {
+    try {
+      const result = await materialService.export(params)
+      return {
+        success: true,
+        data: result,
+        message: '导出成功'
+      }
+    } catch (error) {
+      console.error('[MaterialService] exportMaterials error:', error)
+      return {
+        success: false,
+        message: error.message || '导出物料失败'
+      }
+    }
+  }
+  
+  /**
+   * 更新库存
+   * @param {String} material_id - 物料ID
+   * @param {Number} quantity - 数量变化
+   * @param {String} type - 类型：add(增加), reduce(减少)
+   * @returns {Promise}
+   */
+  async updateStock(material_id, quantity, type) {
+    try {
+      const result = await materialService.updateStock(material_id, quantity, type)
+      return {
+        success: true,
+        data: result,
+        message: '库存更新成功'
+      }
+    } catch (error) {
+      console.error('[MaterialService] updateStock error:', error)
+      return {
+        success: false,
+        message: error.message || '更新库存失败'
+      }
+    }
+  }
+}
+
+// 导出单例
+export default new MaterialService()
