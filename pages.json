@@ -54,6 +54,27 @@
         "navigationBarTitleText": "选择类别",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/workshop/workshop-page",
+      "style": {
+        "navigationBarTitleText": "车间仓",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/bom-issue/bom-issue-page",
+      "style": {
+        "navigationBarTitleText": "按BOM发料",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/excel/excel-manager",
+      "style": {
+        "navigationBarTitleText": "Excel管理",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
