@@ -88,7 +88,7 @@
         </view>
         <view class="stats-row">
           <text class="stats-label">净入库：</text>
-          <text class="stats-value" :class="getNetTotal() >= 0 ? 'inbound' : 'outbound'">
+          <text class="stats-value" :class="[netTotal >= 0 ? 'inbound' : 'outbound']">
             {{ formatStatValue(getNetTotal()) }}
           </text>
         </view>
@@ -486,6 +486,11 @@ export default {
 
     getNetTotal() {
       return this.getInboundTotal() - this.getOutboundTotal()
+    },
+
+    // 计算属性用于模板中的:class
+    netTotal() {
+      return this.getNetTotal()
     },
 
     formatStatValue(value) {

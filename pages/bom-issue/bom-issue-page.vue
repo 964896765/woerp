@@ -160,7 +160,7 @@
                 <view class="quantity-label">车间结存:</view>
                 <view 
                   class="quantity-value balance"
-                  :class="getBalanceClass(item.workshop_balance)"
+                  :class="[item.workshop_balance > 0 ? 'positive' : item.workshop_balance < 0 ? 'negative' : 'zero']"
                 >
                   {{ formatBalance(item.workshop_balance) }} {{ item.unit }}
                 </view>
